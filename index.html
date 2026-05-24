@@ -1,69 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>FocusFlow</title>
+<title>FocusFlow</title>
 
-  <link rel="stylesheet" href="style.css"/>
-
-  <link rel="manifest" href="manifest.json"/>
-
-  <meta name="theme-color" content="#00c853"/>
+<link rel="stylesheet" href="style.css"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#00ff88"/>
 
 </head>
 
 <body>
 
-  <div class="app">
+<div class="topbar">
+  <h1>FocusFlow</h1>
+  <div class="level">Lvl <span id="level">1</span></div>
+</div>
 
-    <h1>FocusFlow</h1>
+<div class="xpbar">
+  <div id="xpFill"></div>
+</div>
 
-    <p id="quote"></p>
+<!-- SWIPE TABS -->
+<div class="tabs">
 
-    <div class="stats">
+  <div class="tab" id="homeTab">
 
-      <div class="card">
-        <h2>XP</h2>
-        <p id="xp">0</p>
-      </div>
+    <h2>Today</h2>
 
-      <div class="card">
-        <h2>Level</h2>
-        <p id="level">1</p>
-      </div>
-
-      <div class="card">
-        <h2>Streak</h2>
-        <p><span id="streak">0</span> 🔥</p>
-      </div>
-
+    <div class="inputRow">
+      <input id="taskInput" placeholder="Add a goal..."/>
+      <button onclick="addTask()">+</button>
     </div>
 
-    <div class="progress-container">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-
-    <div class="task-input">
-
-      <input
-        type="text"
-        id="taskInput"
-        placeholder="Add a task..."
-      />
-
-      <button onclick="addTask()">
-        Add
-      </button>
-
-    </div>
-
-    <ul id="taskList"></ul>
+    <div id="taskList"></div>
 
   </div>
 
-  <script src="script.js"></script>
+  <div class="tab hidden" id="trendingTab">
+    <h2>🔥 Trending Goals</h2>
+    <div id="trending"></div>
+  </div>
+
+  <div class="tab hidden" id="rewardsTab">
+    <h2>🎁 Rewards</h2>
+    <div id="rewards"></div>
+  </div>
+
+  <div class="tab hidden" id="accountTab">
+    <h2>👤 Account</h2>
+
+    <div class="card">
+      <p>Max Streak: <span id="maxStreak">0</span></p>
+      <p>Total Completed: <span id="totalCompleted">0</span></p>
+    </div>
+
+    <div class="card">
+      <label>Daily Reset Time</label>
+      <input type="time" id="resetTime"/>
+      <button onclick="saveSettings()">Save</button>
+    </div>
+
+    <button class="danger" onclick="resetAll()">Reset Everything</button>
+
+  </div>
+
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button onclick="showTab('homeTab')">Home</button>
+  <button onclick="showTab('trendingTab')">Trending</button>
+  <button onclick="showTab('rewardsTab')">Rewards</button>
+  <button onclick="showTab('accountTab')">Account</button>
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
