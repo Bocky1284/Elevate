@@ -1,26 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>FocusFlow</title>
+
   <link rel="stylesheet" href="style.css"/>
+
+  <link rel="manifest" href="manifest.json"/>
+
+  <meta name="theme-color" content="#00c853"/>
+
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="app">
 
     <h1>FocusFlow</h1>
 
+    <p id="quote"></p>
+
     <div class="stats">
-      <div>XP: <span id="xp">0</span></div>
-      <div>Streak: <span id="streak">0</span> 🔥</div>
+
+      <div class="card">
+        <h2>XP</h2>
+        <p id="xp">0</p>
+      </div>
+
+      <div class="card">
+        <h2>Level</h2>
+        <p id="level">1</p>
+      </div>
+
+      <div class="card">
+        <h2>Streak</h2>
+        <p><span id="streak">0</span> 🔥</p>
+      </div>
+
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
     </div>
 
     <div class="task-input">
-      <input type="text" id="taskInput" placeholder="Enter a task...">
-      <button onclick="addTask()">Add</button>
+
+      <input
+        type="text"
+        id="taskInput"
+        placeholder="Add a task..."
+      />
+
+      <button onclick="addTask()">
+        Add
+      </button>
+
     </div>
 
     <ul id="taskList"></ul>
