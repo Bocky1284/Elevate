@@ -1,12 +1,17 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #121212;
+  background: linear-gradient(180deg, #121212, #1b1b1b);
   color: white;
+  min-height: 100vh;
 }
 
-.container {
-  max-width: 500px;
+.app {
+  max-width: 550px;
   margin: auto;
   padding: 20px;
 }
@@ -14,15 +19,54 @@ body {
 h1 {
   text-align: center;
   font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+#quote {
+  text-align: center;
+  opacity: 0.7;
+  margin-bottom: 25px;
 }
 
 .stats {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
   margin-bottom: 20px;
-  background: #1e1e1e;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
   padding: 15px;
-  border-radius: 12px;
+  border-radius: 20px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.7;
+}
+
+.card p {
+  font-size: 1.5rem;
+  margin-top: 10px;
+}
+
+.progress-container {
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  height: 16px;
+  margin-bottom: 25px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #00c853;
+  transition: width 0.3s ease;
 }
 
 .task-input {
@@ -31,22 +75,33 @@ h1 {
   margin-bottom: 20px;
 }
 
-input {
+.task-input input {
   flex: 1;
-  padding: 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
+  padding: 14px;
   font-size: 1rem;
+  background: rgba(255,255,255,0.08);
+  color: white;
 }
 
-button {
-  padding: 12px 20px;
+.task-input input:focus {
+  outline: 2px solid #00c853;
+}
+
+.task-input button {
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
+  padding: 14px 20px;
   background: #00c853;
   color: white;
   font-size: 1rem;
   cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.task-input button:hover {
+  transform: scale(1.05);
 }
 
 ul {
@@ -55,15 +110,51 @@ ul {
 }
 
 li {
-  background: #1e1e1e;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  padding: 16px;
+  border-radius: 18px;
+  margin-bottom: 12px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  animation: fadeIn 0.3s ease;
 }
 
 .complete-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
   background: #2962ff;
+  color: white;
+  cursor: pointer;
+}
+
+.completed {
+  opacity: 0;
+  transform: translateX(100px);
+  transition: 0.3s ease;
+}
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
 }
