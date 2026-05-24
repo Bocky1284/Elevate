@@ -1,120 +1,134 @@
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let xp = +localStorage.getItem("xp") || 0;
+let streak = +localStorage.getItem("streak") || 0;
+let maxStreak = +localStorage.getItem("maxStreak") || 0;
+let totalCompleted = +localStorage.getItem("totalCompleted") || 0;
 
-let xp = Number(localStorage.getItem("xp")) || 0;
-
-let streak = Number(localStorage.getItem("streak")) || 0;
-
-const quotes = [
-
-  "Small progress is still progress.",
-  "Discipline beats motivation.",
-  "One task at a time.",
-  "Your future self will thank you.",
-  "Done is better than perfect."
-
+let rewards = [
+  { name: "Dark Theme Glow", cost: 50, unlocked:false },
+  { name: "Focus Mode Music", cost: 120, unlocked:false },
+  { name: "Golden UI", cost: 250, unlocked:false }
 ];
 
-document.getElementById("quote").textContent =
-  quotes[Math.floor(Math.random() * quotes.length)];
+let trendingGoals = [
+  "Drink water 💧",
+  "Study 25 mins 📚",
+  "Clean your room 🧹",
+  "Workout 💪",
+  "No phone 1 hour 📵"
+];
 
-function saveData() {
-
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  localStorage.setItem("xp", xp);
-  localStorage.setItem("streak", streak);
-
+function save(){
+localStorage.setItem("tasks", JSON.stringify(tasks));
+localStorage.setItem("xp", xp);
+localStorage.setItem("streak", streak);
+localStorage.setItem("maxStreak", maxStreak);
+localStorage.setItem("totalCompleted", totalCompleted);
 }
 
-function getLevel() {
-  return Math.floor(xp / 100) + 1;
+function level(){
+return Math.floor(xp/100)+1;
 }
 
-function updateProgressBar() {
+function render(){
 
-  const currentXP = xp % 100;
+document.getElementById("level").innerText = level();
 
-  document.getElementById("progressBar").style.width =
-    currentXP + "%";
+let fill = (xp % 100);
+document.getElementById("xpFill").style.width = fill + "%";
 
+let list = document.getElementById("taskList");
+list.innerHTML = "";
+
+tasks.forEach((t,i)=>{
+let div = document.createElement("div");
+div.className="task";
+div.innerHTML = `
+<span>${t}</span>
+<button onclick="done(${i})">✔</button>
+`;
+list.appendChild(div);
+});
+
+document.getElementById("trending").innerHTML =
+trendingGoals.map(t=>`<div class="card">${t}</div>`).join("");
+
+document.getElementById("rewards").innerHTML =
+rewards.map((r,i)=>`
+<div class="card">
+${r.name} - ${r.cost} XP
+<button onclick="buy(${i})">Buy</button>
+</div>
+`).join("");
+
+document.getElementById("maxStreak").innerText = maxStreak;
+document.getElementById("totalCompleted").innerText = totalCompleted;
+
+save();
 }
 
-function renderTasks() {
-
-  const taskList = document.getElementById("taskList");
-
-  taskList.innerHTML = "";
-
-  tasks.forEach((task, index) => {
-
-    const li = document.createElement("li");
-
-    li.innerHTML = `
-      <span>${task}</span>
-
-      <button class="complete-btn"
-        onclick="completeTask(${index}, this)">
-        Complete
-      </button>
-    `;
-
-    taskList.appendChild(li);
-
-  });
-
-  document.getElementById("xp").textContent = xp;
-
-  document.getElementById("level").textContent = getLevel();
-
-  document.getElementById("streak").textContent = streak;
-
-  updateProgressBar();
-
+function addTask(){
+let v = document.getElementById("taskInput").value;
+if(!v) return;
+tasks.push(v);
+document.getElementById("taskInput").value="";
+render();
 }
 
-function addTask() {
+function done(i){
+tasks.splice(i,1);
+xp += 10;
+streak++;
+totalCompleted++;
 
-  const input = document.getElementById("taskInput");
+if(streak > maxStreak) maxStreak = streak;
 
-  const task = input.value.trim();
-
-  if (!task) return;
-
-  tasks.push(task);
-
-  input.value = "";
-
-  saveData();
-
-  renderTasks();
-
+render();
 }
 
-function completeTask(index, button) {
-
-  const li = button.parentElement;
-
-  li.classList.add("completed");
-
-  setTimeout(() => {
-
-    tasks.splice(index, 1);
-
-    xp += 10;
-
-    streak += 1;
-
-    saveData();
-
-    renderTasks();
-
-  }, 250);
-
+function buy(i){
+if(xp >= rewards[i].cost && !rewards[i].unlocked){
+xp -= rewards[i].cost;
+rewards[i].unlocked = true;
+alert("Unlocked: " + rewards[i].name);
+render();
+}
 }
 
-renderTasks();
-
-if ("serviceWorker" in navigator) {
-
-  navigator.serviceWorker.register("service-worker.js");
-
+function showTab(id){
+document.querySelectorAll(".tab").forEach(t=>t.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
 }
+
+function resetAll(){
+if(confirm("Reset EVERYTHING?")){
+localStorage.clear();
+location.reload();
+}
+}
+
+function saveSettings(){
+let time = document.getElementById("resetTime").value;
+localStorage.setItem("resetTime", time);
+alert("Saved reset time (feature logic can be upgraded later)");
+}
+
+render();
+
+/* SWIPE SUPPORT (simple version) */
+let startX = 0;
+
+document.addEventListener("touchstart", e=>{
+startX = e.touches[0].clientX;
+});
+
+document.addEventListener("touchend", e=>{
+let endX = e.changedTouches[0].clientX;
+
+if(startX - endX > 50){
+showTab("trendingTab");
+}
+if(endX - startX > 50){
+showTab("homeTab");
+}
+});
